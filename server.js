@@ -16,6 +16,10 @@ app.get('/', function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
+app.post('/api/exercise/new-user', function(request, response) {
+  response.send(JSON.parse(request.body));
+});
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port);
