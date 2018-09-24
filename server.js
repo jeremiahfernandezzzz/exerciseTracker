@@ -28,7 +28,22 @@ app.post('/api/exercise/new-user', function(request, response) {
       MongoClient.connect(url, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
-        db.collection("exercises").insertOne({username: request.body.username});
+        db.collection("exercises").insertOne({username: request.body.username, exercises: []});
+        // response.end(JSON.stringify(db));
+      }
+      if (err) {
+        response.end("did not connect to " + url)
+      }
+    })
+});
+
+app.post('/api/exercise/add', function(request, response) {
+  // response.send(request.body);
+      MongoClient.connect(url, function(err, client){
+      if (client){
+        var db = client.db('clementinejs2');
+        db.collection("exercises").update({_id[]: request.body.userId});
+        db.collection("exercises").insertOne({userId: request.body.userId, description: request.body.description, duration: request.body.duration, date: request.body.date});
         // response.end(JSON.stringify(db));
       }
       if (err) {
