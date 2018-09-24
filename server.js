@@ -7,6 +7,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
 var MongoClient = mongodb.MongoClient;
+var ObjectId = require('mongodb').ObjectID;
 var url = 'mongodb://jopet:jopet@ds131546.mlab.com:31546/clementinejs2';
 
 // we've started you off with Express, 
@@ -42,7 +43,7 @@ app.post('/api/exercise/add', function(request, response) {
       MongoClient.connect(url, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
-        db.collection("exercises").update({"_id[$oid]": request.body.userId}, {exercises: [{description: request.body.description, duration: request.body.duration, date: request.body.date}]});
+        db.collection("exercises").update({"_id": ObjectId(request.body.userId)}, {$push: {exercises: {description: request.body.description, duration: request.body.duration, date: request.body.date}}});
         // db.collection("exercises").insertOne({userId: request.body.userId, description: request.body.description, duration: request.body.duration, date: request.body.date});
         // response.end(JSON.stringify(db));
       }
