@@ -5,5 +5,5 @@ console.log('hello world :o');
 
 // listen for the form to be submitted and add a new dream when it is
 document.forms[0].onsubmit = function(event) {
-  res.send(JSON.stringify(document.forms[0].elements['username']));
+  // res.send(JSON.stringify(document.forms[0].elements['username']));
 };
