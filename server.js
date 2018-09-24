@@ -25,10 +25,11 @@ app.get('/', function(request, response) {
 
 app.post('/api/exercise/new-user', function(request, response) {
   // response.send(request.body);
-      MongoClient.connect(url, function(err, db){
-      if (db){
-        // db.collection("exercises").insert({username: request.body.username});
-        response.end(JSON.stringify(db));
+      MongoClient.connect(url, function(err, client){
+      if (client){
+        var db = client.db('clementinejs2');
+        db.collection("exercises").insert({username: request.body.username});
+        // response.end(JSON.stringify(db));
       }
       if (err) {
         response.end("did not connect to " + url)
