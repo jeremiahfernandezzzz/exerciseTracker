@@ -27,7 +27,7 @@ app.post('/api/exercise/new-user', function(request, response) {
   // response.send(request.body);
       MongoClient.connect(url, function(err, db){
       if (db){
-        db.collection("exercises").insertOne({username: request.body.username});
+        db.collection("exercises").insert({username: request.body.username});
         response.end("aye");
       }
       if (err) {
