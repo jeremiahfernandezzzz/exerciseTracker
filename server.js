@@ -76,8 +76,10 @@ app.get('/api/exercise/log', function(request, response){
       if (client){
         var db = client.db('clementinejs2');
         db.collection("exercises").find({"_id": ObjectId(request.query.userId)}, {username: 1, exercises: 1}).toArray(function(err, doc){
-          if(request.query.hahaha){
-            response.send(doc);
+          if(request.query.from){
+            doc["exercises"].forEach(function(exercise){
+              console.log(exercise);
+            })
           } else {
             response.send("123");
           }
