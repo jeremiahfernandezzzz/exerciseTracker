@@ -5,6 +5,9 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var mongodb = require("mongodb");
+var MongoClient = mongodb.MongoClient;
+var url = 'mongodb://jopet:jopet@ds131546.mlab.com:31546/clementinejs2';
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -21,7 +24,15 @@ app.get('/', function(request, response) {
 });
 
 app.post('/api/exercise/new-user', function(request, response) {
-  response.send(request.body);
+  // response.send(request.body);
+      MongoClient.connect(url, function(err, db){
+      if (db){
+        db.collection("exercises").insertOne({username: request.body.username})
+      }
+      if (err) {
+        response.end("did not connect to " + url)
+      }
+    })
 });
 
 // listen for requests :)
