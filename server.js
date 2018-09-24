@@ -42,7 +42,7 @@ app.post('/api/exercise/add', function(request, response) {
       MongoClient.connect(url, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
-        db.collection("exercises").update({"username": request.body.userId}, {exercises: [{description: request.body.description, duration: request.body.duration, date: request.body.date}]});
+        db.collection("exercises").update({"_id[$oid]": request.body.userId}, {exercises: [{description: request.body.description, duration: request.body.duration, date: request.body.date}]});
         // db.collection("exercises").insertOne({userId: request.body.userId, description: request.body.description, duration: request.body.duration, date: request.body.date});
         // response.end(JSON.stringify(db));
       }
