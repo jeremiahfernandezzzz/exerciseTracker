@@ -31,14 +31,14 @@ app.post('/api/exercise/new-user', function(request, response) {
         var db = client.db('clementinejs2');
         
         db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
-          if(doc){
-            response.send("username already taken");
+          if(doc[0]){
+            response.send(doc);
           } else {
-            db.collection("exercises").insertOne({username: request.body.username, exercises: []});
+            // db.collection("exercises").insertOne({username: request.body.username, exercises: []});
             
-            db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
-                response.send(doc);
-            })
+//             db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
+                response.send("asd");
+//             })
             
           }
         })
