@@ -29,7 +29,20 @@ app.post('/api/exercise/new-user', function(request, response) {
       MongoClient.connect(dburl, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
-        db.collection("exercises").insertOne({username: request.body.username, exercises: []});
+        
+        db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
+          if(doc){
+            response.send("username already taken");
+          } else {
+            db.collection("exercises").insertOne({username: request.body.username, exercises: []});
+            
+            db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
+                response.send(doc);
+            })
+            
+          }
+        })
+
         // response.end(JSON.stringify(db));
       }
       if (err) {
@@ -46,6 +59,9 @@ app.post('/api/exercise/add', function(request, response) {
         db.collection("exercises").update({"_id": ObjectId(request.body.userId)}, {$push: {exercises: {description: request.body.description, duration: request.body.duration, date: request.body.date}}});
         // db.collection("exercises").insertOne({userId: request.body.userId, description: request.body.description, duration: request.body.duration, date: request.body.date});
         // response.end(JSON.stringify(db));
+        db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
+          response.send(doc);
+        })
       }
       if (err) {
         response.end("did not connect to " + dburl)
@@ -54,19 +70,22 @@ app.post('/api/exercise/add', function(request, response) {
 });
 
 app.get('/api/exercise/log', function(request, response){
-      MongoClient.connect(dburl, function(err, client){
+        
+    
+    MongoClient.connect(dburl, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
-        db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
-          res.send(doc)
+        db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
+          response.send(doc);
         })
+      }
       if (err) {
         response.end("did not connect to " + dburl)
       }
     })
   
-  response.send(request.query);
-  console.log(request.query);
+  // response.send(request.query);
+  // console.log(request.query);
 
 })
 
