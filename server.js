@@ -30,15 +30,15 @@ app.post('/api/exercise/new-user', function(request, response) {
       if (client){
         var db = client.db('clementinejs2');
         
-        db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
-          if(doc[0]){
-            response.send(doc);
+        db.collection("exercises").find({username: request.body.username}, {username: 1, exercises: 1}).toArray(function(err, doc){
+          if(doc.length  > 0){
+                response.send("username taken");
           } else {
-            // db.collection("exercises").insertOne({username: request.body.username, exercises: []});
+            db.collection("exercises").insertOne({username: request.body.username, exercises: []});
             
-//             db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
-                response.send("asd");
-//             })
+            db.collection("exercises").find({username: request.body.username}).toArray(function(err, doc){
+                response.send(doc);
+            })
             
           }
         })
