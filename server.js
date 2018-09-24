@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
 var MongoClient = mongodb.MongoClient;
 var ObjectId = require('mongodb').ObjectID;
-var url = 'mongodb://jopet:jopet@ds131546.mlab.com:31546/clementinejs2';
+var dburl = 'mongodb://jopet:jopet@ds131546.mlab.com:31546/clementinejs2';
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -26,21 +26,21 @@ app.get('/', function(request, response) {
 
 app.post('/api/exercise/new-user', function(request, response) {
   // response.send(request.body);
-      MongoClient.connect(url, function(err, client){
+      MongoClient.connect(dburl, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
         db.collection("exercises").insertOne({username: request.body.username, exercises: []});
         // response.end(JSON.stringify(db));
       }
       if (err) {
-        response.end("did not connect to " + url)
+        response.end("did not connect to " + dburl)
       }
     })
 });
 
 app.post('/api/exercise/add', function(request, response) {
   // response.send(request.body);
-      MongoClient.connect(url, function(err, client){
+      MongoClient.connect(dburl, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
         db.collection("exercises").update({"_id": ObjectId(request.body.userId)}, {$push: {exercises: {description: request.body.description, duration: request.body.duration, date: request.body.date}}});
@@ -48,10 +48,21 @@ app.post('/api/exercise/add', function(request, response) {
         // response.end(JSON.stringify(db));
       }
       if (err) {
-        response.end("did not connect to " + url)
+        response.end("did not connect to " + dburl)
       }
     })
 });
+
+app.get('/api/exercise/log?userId=:id', function(request, response){
+
+  var url = require('url');
+  var url_parts = url.parse(request.url, true);
+  var query = url_parts.query;
+  
+  response.send(request.query.id);
+  console.log(request.query.id);
+
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function() {
