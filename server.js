@@ -76,12 +76,18 @@ app.get('/api/exercise/log', function(request, response){
       if (client){
         var db = client.db('clementinejs2');
         db.collection("exercises").find({"_id": ObjectId(request.query.userId)}, {username: 1, exercises: 1}).toArray(function(err, doc){
-          if(request.query.from){
-            doc["exercises"].forEach(function(exercise){
-              console.log(exercise);
+          if(request.query.from && request.query.to){
+            var filteredExercises = [];
+            doc[0]["exercises"].forEach(function(exercise){
+              if (exercise["date"] >= request.query.from && exercise["date"] <= request.query.to) {
+                filteredExercises.push(exercise);
+              }
             })
+            doc[0]["exercises"] = filteredExercises;
+            response.send(doc);
+            // console.log(doc[0]["exercises"]);
           } else {
-            response.send("123");
+            response.send(doc);
           }
         })
       }
