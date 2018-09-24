@@ -26,23 +26,35 @@
   <body>
     <header>
       <h1>
-        A Dream of the Future
+        Exercise Tracker
       </h1>
     </header>
 
     <main>
-      <p class="bold">Oh hi,</p>
-      
-      <p>Tell me your hopes and dreams:</p>
-      
       <form>
-        <input name="dream" type="text" maxlength="100" placeholder="Dreams!" aria-labelledby="submit-dream">
-        <button type="submit" id="submit-dream">Submit Dream</button>
+        <p class="bold">create new user</p>
+        <p><code>POST /api/exercise/new-user</code></p>
+        
+        <input name="username" type="text" maxlength="100" placeholder="username" aria-labelledby="submit-dream">
+        <button type="submit" id="submit-new">Submit</button>
+      </form>
+            
+      <form>
+        <p class="bold">add exercises</p>
+        <p><code>POST /api/exercise/add</code></p>
+        
+        <input name="userId" type="text" maxlength="100" placeholder="userId" aria-labelledby="submit-dream">
+        <input name="description" type="text" maxlength="100" placeholder="description" aria-labelledby="submit-dream">
+        <input name="duration" type="text" maxlength="100" placeholder="duration (mins)" aria-labelledby="submit-dream">
+        <input name="date" type="text" maxlength="100" placeholder="date (yyyy-mm-dd)" aria-labelledby="submit-dream">
+        <button type="submit" id="submit-query">Submit</button>
       </form>
       
-      <section class="dreams">
-        <ul id="dreams"></ul>
-      </section>
+      <p>GET users's exercise log: <code>GET /api/exercise/log?{userId}[&from][&to][&limit]</code></p>
+      
+      <p>{ } = required, [ ] = optional</p>
+
+      <p>from, to = dates (yyyy-mm-dd); limit = number</p>
     </main>
 
     <footer>
