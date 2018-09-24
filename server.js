@@ -75,8 +75,12 @@ app.get('/api/exercise/log', function(request, response){
     MongoClient.connect(dburl, function(err, client){
       if (client){
         var db = client.db('clementinejs2');
-        db.collection("exercises").find({"_id": ObjectId(request.body.userId)}).toArray(function(err, doc){
-          response.send(doc);
+        db.collection("exercises").find({"_id": ObjectId(request.query.userId)}, {username: 1, exercises: 1}).toArray(function(err, doc){
+          if(request.query.hahaha){
+            response.send(doc);
+          } else {
+            response.send("123");
+          }
         })
       }
       if (err) {
