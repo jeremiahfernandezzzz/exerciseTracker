@@ -53,14 +53,20 @@ app.post('/api/exercise/add', function(request, response) {
     })
 });
 
-app.get('/api/exercise/log?userId=:id', function(request, response){
-
-  var url = require('url');
-  var url_parts = url.parse(request.url, true);
-  var query = url_parts.query;
+app.get('/api/exercise/log', function(request, response){
+      MongoClient.connect(dburl, function(err, client){
+      if (client){
+        var db = client.db('clementinejs2');
+        db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
+          res.send(doc)
+        })
+      if (err) {
+        response.end("did not connect to " + dburl)
+      }
+    })
   
-  response.send(request.query.id);
-  console.log(request.query.id);
+  response.send(request.query);
+  console.log(request.query);
 
 })
 
